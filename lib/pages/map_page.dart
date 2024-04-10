@@ -12,18 +12,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-
-
-
-  // final LocationController locationController =
-  // Get.put<LocationController>(LocationController());
-  //
-  // @override
-  // void initState() {
-  //   LocationService.instance.getUserLocation(controller: locationController);
-  //   super.initState();
-  // }
-
+  
   final Completer<GoogleMapController> googleMapCompleterController = Completer<GoogleMapController>();
   GoogleMapController? controllerGoogleMap;
 
