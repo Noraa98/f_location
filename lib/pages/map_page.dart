@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:go_car/global/global_var.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'functions.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -12,33 +14,50 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  
-  final Completer<GoogleMapController> googleMapCompleterController = Completer<GoogleMapController>();
-  GoogleMapController? controllerGoogleMap;
+  Position? _currentPosition;
+  LatLng? _currentLatLng;
 
-  static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
-  static const LatLng _pApplePark = LatLng(37.3346, -122.0090);
+  @override
+  void initState() {
+    getLocation();
+    super.initState();
+  }
+
+  void getLocation() async {
+    _currentPosition = await LocationHandler.getCurrentPosition();
+    _currentLatLng =
+        LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
+    markers.add(
+      Marker(
+        markerId: const MarkerId('currentLocation'),
+        position: _currentLatLng!,
+      ),
+    );
+    setState(() {});
+  }
+
+  final Completer<GoogleMapController> googleMapCompleterController =
+      Completer<GoogleMapController>();
+  GoogleMapController? mapController;
+  Set<Marker> markers = {};
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target:_pGooglePlex,
-          zoom: 13,
-        ),
-        markers: {
-          Marker(
-            markerId: MarkerId("_currentLocation"),
-            icon: BitmapDescriptor.defaultMarker,
-            position: _pGooglePlex!,
-          ),
-          Marker(
-            markerId: MarkerId("_sourceLocation"),
-            icon: BitmapDescriptor.defaultMarker,
-            position: _pApplePark!,
-          )
-        },
-      ),
+      body: _currentPosition == null
+          ? const Center(child: CircularProgressIndicator())
+          : GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _currentLatLng!,
+                zoom: 14.0,
+              ),
+              markers: markers,
+            ),
     );
   }
 }
