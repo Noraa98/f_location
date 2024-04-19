@@ -1,12 +1,13 @@
-import 'package:flutter_maps/data/models/Place_suggestion.dart';
-import 'package:flutter_maps/data/models/place.dart';
-import 'package:flutter_maps/data/models/place_directions.dart';
-import 'package:flutter_maps/data/webservices/places_webservices.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:flutter_maps/data/models/Place_suggestion.dart';
+// import 'package:flutter_maps/data/models/place.dart';
+// import 'package:flutter_maps/data/models/place_directions.dart';
+// import 'package:flutter_maps/data/webservices/places_webservices.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../models/place.dart';
-import '../models/placeSuggestation.dart';
 import '../models/place_directions.dart';
+import '../models/place_suggestation.dart';
+import '../webservices/places_web_services.dart';
 
 class MapsRepository {
   final PlacesWebservices placesWebservices;
@@ -16,7 +17,7 @@ class MapsRepository {
   Future<List<PlaceSuggestion>> fetchSuggestions(
       String place, String sessionToken) async {
     final suggestions =
-    await placesWebservices.fetchSuggestions(place, sessionToken);
+        await placesWebservices.fetchSuggestions(place, sessionToken);
 
     return suggestions
         .map((suggestion) => PlaceSuggestion.fromJson(suggestion))
@@ -25,7 +26,7 @@ class MapsRepository {
 
   Future<Place> getPlaceLocation(String placeId, String sessionToken) async {
     final place =
-    await placesWebservices.getPlaceLocation(placeId, sessionToken);
+        await placesWebservices.getPlaceLocation(placeId, sessionToken);
     // var readyPlace = Place.fromJson(place);
     return Place.fromJson(place);
   }
@@ -33,7 +34,7 @@ class MapsRepository {
   Future<PlaceDirections> getDirections(
       LatLng origin, LatLng destination) async {
     final directions =
-    await placesWebservices.getDirections(origin, destination);
+        await placesWebservices.getDirections(origin, destination);
 
     return PlaceDirections.fromJson(directions);
   }

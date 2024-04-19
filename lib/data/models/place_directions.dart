@@ -1,9 +1,8 @@
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlaceDirections {
   late LatLngBounds bounds;
-  late List<PointLatLng> polylinePoints;
+  late List<LatLng> polylinePoints;
   late String totalDistance;
   late String totalDuration;
 
@@ -35,8 +34,7 @@ class PlaceDirections {
 
     return PlaceDirections(
       bounds: bounds,
-      polylinePoints:
-      PolylinePoints().decodePolyline(data['overview_polyline']['points']),
+      polylinePoints: data['overview_polyline']['points'].map((x) => LatLng.fromJson(x)).toList(),
       totalDistance: distance,
       totalDuration: duration,
     );
