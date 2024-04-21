@@ -226,6 +226,7 @@ class _MapPageState extends State<MapPage> {
   final Set<Marker> _markers = {};
   Position? _currentPosition;
   List<PlaceSuggestion> suggestions = [];
+  LatLng defaultPosition = const LatLng(26.8206, 30.8025);
 
   @override
   void initState() {
@@ -314,7 +315,8 @@ class _MapPageState extends State<MapPage> {
                   title: Text(suggestion.description),
                   onTap: () {
                     // Handle the tap event, maybe use the suggestion for a search or place details
-                    debugPrint('Tapped on suggestion: ${suggestion.description}');
+                    debugPrint(
+                        'Tapped on suggestion: ${suggestion.description}');
                   },
                 );
               },
@@ -333,8 +335,6 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: true,
-      // body: buildFloatingSearchBar(),
       body: Stack(
         children: [
           buildFloatingSearchBar(),
@@ -342,11 +342,13 @@ class _MapPageState extends State<MapPage> {
             child: GoogleMap(
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
-                target: LatLng(
-                  _currentPosition?.latitude ?? 0,
-                  _currentPosition?.longitude ?? 0,
-                ),
-                zoom: 14.0,
+                target: (_currentPosition == null
+                    ? defaultPosition
+                    : LatLng(
+                        _currentPosition!.latitude,
+                        _currentPosition!.longitude,
+                      )),
+                zoom: 13,
               ),
               markers: _markers,
             ),
