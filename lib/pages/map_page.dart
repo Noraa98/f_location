@@ -49,8 +49,19 @@ class _MapPageState extends State<MapPage> {
       child: Column(
         children: [
           PlacesAutocompleteFormField(
-            apiKey: googleMapKey,
+            apiKey: googleMapKey, // Replace with your Google API Key
             controller: textEditingController,
+            mode: Mode.overlay, // Mode.fullscreen or Mode.overlay
+            language: 'en',
+            onSaved: (value) {
+              print('Place saved: $value');
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter a place';
+              }
+              return null;
+            }
           ),
           _currentPosition != null
               ? Expanded(
