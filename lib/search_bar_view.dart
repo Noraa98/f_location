@@ -5,8 +5,6 @@ import 'package:google_api_headers/google_api_headers.dart' as header;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart' as places;
 
-// import 'package:location/location.dart';
-// import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class SearchBarView extends StatefulWidget {
   const SearchBarView({super.key});
 
@@ -20,6 +18,7 @@ class _SearchBarViewState extends State<SearchBarView> {
   double latitude = 0;
   double longitude = 0;
   GoogleMapController? _controller;
+
 
   Future<void> _handleSearch() async {
     places.Prediction? p = await loc.PlacesAutocomplete.show(
@@ -41,7 +40,7 @@ class _SearchBarViewState extends State<SearchBarView> {
       ),
       components: [], // you can determine search for just one country
     );
-    print(p!.toJson());
+    debugPrint(p!.toJson().toString());
     displayPrediction(p);
   }
 
@@ -91,12 +90,10 @@ class _SearchBarViewState extends State<SearchBarView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: _handleSearch,
-          child: const Text('search'),
-        ),
+    return Center(
+      child: ElevatedButton(
+        onPressed: _handleSearch,
+        child: const Text('search'),
       ),
     );
   }

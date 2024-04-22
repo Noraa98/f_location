@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_car/pages/map_page.dart';
+import 'package:go_car/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,8 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MapPage(),
-      // home: const SearchBarView(),
+      home: const HomeScreen(),
     );
   }
 }
