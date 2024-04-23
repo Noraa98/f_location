@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_car/global/global_var.dart';
 import 'package:go_car/pages/functions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 
 import '../data/models/place_suggestation.dart';
@@ -22,7 +23,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   late FloatingSearchBarController floatingSearchController;
   final Completer<GoogleMapController> _googleMapControllerCompleter =
-  Completer();
+      Completer();
   TextEditingController textEditingController = TextEditingController();
   final Set<Marker> _markers = {};
   Position? _currentPosition;
@@ -48,43 +49,64 @@ class _MapPageState extends State<MapPage> {
       padding: const EdgeInsets.only(top: 30.0),
       child: Column(
         children: [
-          PlacesAutocompleteFormField(
-            apiKey: googleMapKey, // Replace with your Google API Key
-            controller: textEditingController,
-            mode: Mode.overlay, // Mode.fullscreen or Mode.overlay
-            language: 'en',
-            onSaved: (value) {
-              print('Place saved: $value');
+          GooglePlaceAutoCompleteTextField(
+            textEditingController: textEditingController,
+            googleAPIKey: googleMapKey,
+            inputDecoration: const InputDecoration(),
+            debounceTime: 800,
+            countries: const ["in", "en", "us"],
+            isLatLngRequired: true,
+            getPlaceDetailWithLatLng: (Prediction prediction) {
+              print("placeDetails${prediction.lng}");
             },
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter a place';
-              }
-              return null;
-            }
+            itemClick: (Prediction prediction) {
+              textEditingController.text = prediction.description!;
+              textEditingController.selection = TextSelection.fromPosition(
+                TextPosition(offset: prediction.description!.length),
+              );
+            },
+            // if we want to make custom list item builder
+            itemBuilder: (context, index, Prediction prediction) {
+              return Container(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    const Icon(Icons.location_on),
+                    const SizedBox(
+                      width: 7,
+                    ),
+                    Expanded(child: Text(prediction.description ?? ""))
+                  ],
+                ),
+              );
+            },
+            seperatedBuilder: const Divider(),
+            isCrossBtnShown: true,
+            containerHorizontalPadding: 10,
           ),
           _currentPosition != null
               ? Expanded(
-            child: GoogleMap(
-              onMapCreated: (controller) =>
-                  _googleMapControllerCompleter.complete(controller),
-              initialCameraPosition: CameraPosition(
-                target: LatLng(
-                  _currentPosition!.latitude,
-                  _currentPosition!.longitude,
-                ),
-                zoom: 13,
-              ),
-              markers: _markers,
-            ),
-          )
+                  child: GoogleMap(
+                    onMapCreated: (controller) =>
+                        _googleMapControllerCompleter.complete(controller),
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(
+                        _currentPosition!.latitude,
+                        _currentPosition!.longitude,
+                      ),
+                      zoom: 13,
+                    ),
+                    markers: _markers,
+                  ),
+                )
               : const Center(
-            child: CircularProgressIndicator(),
-          ),
+                  child: CircularProgressIndicator(),
+                ),
         ],
       ),
     );
   }
+
   void _getCurrentLocation() async {
     _currentPosition = await LocationHandler.getCurrentPosition();
     if (_currentPosition != null) {
