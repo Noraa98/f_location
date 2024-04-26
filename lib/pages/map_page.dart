@@ -51,7 +51,7 @@ class _MapPageState extends State<MapPage> {
         children: [
           GooglePlaceAutoCompleteTextField(
             textEditingController: textEditingController,
-            googleAPIKey: googleMapKey,
+            googleAPIKey: "AIzaSyCnf5vmISVW0pB3XbiyM9wsACG85GuyIqI",
             inputDecoration: const InputDecoration(),
             debounceTime: 800,
             countries: const ["in", "en", "us"],

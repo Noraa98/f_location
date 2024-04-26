@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "905393048791",
+    "project_id": "uper-app-4df8c",
+    "storage_bucket": "uper-app-4df8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905393048791:android:7e4a61d2b2c7d5d3517492",
+        "android_client_info": {
+          "package_name": "com.example.go_car"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmL-3SI0dtM38HDtIHxZwias5S-SuOS4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
